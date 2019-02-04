@@ -11,8 +11,4 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
-    <style name="FullScreenDialogBottomSheetStyle" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
-        <item name="android:backgroundDimEnabled">false</item>
-    </style>
-
 </resources>

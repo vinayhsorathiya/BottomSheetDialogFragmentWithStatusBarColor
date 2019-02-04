@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.DialogFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -17,27 +16,25 @@ import kotlinx.android.synthetic.main.bottom_sheet_my_view.*
 class MyBottomSheetDialog : BottomSheetDialogFragment() {
     private lateinit var toolbar: Toolbar
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialogBottomSheetStyle)
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-        dialog.setOnShowListener {
-            setupBottomSheetDialog(dialog)
-        }
+        dialog.setOnShowListener { setupBottomSheetDialog(dialog) }
+        dialog.window?.setDimAmount(0f)
         return dialog
     }
 
     private fun setupBottomSheetDialog(dialog: BottomSheetDialog) {
         val bottomSheet =
-                dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
+            dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
         val behavior = BottomSheetBehavior.from(bottomSheet!!)
-        behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        behavior.skipCollapsed = true
-        behavior.isHideable = true
-        behavior.setBottomSheetCallback(getBottomSheetCallback())
+        setupDialogBehavior(behavior)
+    }
+
+    private fun setupDialogBehavior(behavior: BottomSheetBehavior<FrameLayout>?) {
+        behavior?.state = BottomSheetBehavior.STATE_EXPANDED
+        behavior?.skipCollapsed = true
+        behavior?.isHideable = true
+        behavior?.setBottomSheetCallback(getBottomSheetCallback())
     }
 
     private fun getBottomSheetCallback(): BottomSheetBehavior.BottomSheetCallback? {
@@ -58,15 +55,16 @@ class MyBottomSheetDialog : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.bottom_sheet_my_view, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         findViews()
         setupViews()
     }
