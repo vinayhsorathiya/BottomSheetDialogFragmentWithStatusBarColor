@@ -17,24 +17,21 @@ class MyBottomSheetDialog : BottomSheetDialogFragment() {
     private lateinit var toolbar: Toolbar
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-        dialog.setOnShowListener { setupBottomSheetDialog(dialog) }
-        dialog.window?.setDimAmount(0f)
-        return dialog
+        return (super.onCreateDialog(savedInstanceState) as BottomSheetDialog).apply {
+            setOnShowListener { setupBottomSheetDialog(this) }
+            window?.setDimAmount(0f)
+        }
     }
 
     private fun setupBottomSheetDialog(dialog: BottomSheetDialog) {
         val bottomSheet =
             dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout? ?: return
-        val behavior = BottomSheetBehavior.from(bottomSheet)
-        setupDialogBehavior(behavior)
-    }
-
-    private fun setupDialogBehavior(behavior: BottomSheetBehavior<FrameLayout>?) {
-        behavior?.state = BottomSheetBehavior.STATE_EXPANDED
-        behavior?.skipCollapsed = true
-        behavior?.isHideable = true
-        behavior?.setBottomSheetCallback(getBottomSheetCallback())
+        BottomSheetBehavior.from(bottomSheet).apply {
+            state = BottomSheetBehavior.STATE_EXPANDED
+            skipCollapsed = true
+            isHideable = true
+            setBottomSheetCallback(getBottomSheetCallback())
+        }
     }
 
     private fun getBottomSheetCallback(): BottomSheetBehavior.BottomSheetCallback? {
