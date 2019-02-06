@@ -3,6 +3,7 @@ package yaroslav.ovdiienko.idivision.bottomsheetdialogfragmentwithstatusbarcolor
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +19,17 @@ class MyBottomSheetDialog : BottomSheetDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return (super.onCreateDialog(savedInstanceState) as BottomSheetDialog).apply {
-            setOnShowListener { setupBottomSheetDialog(this) }
             window?.setDimAmount(0f)
+            setOnShowListener { setupBottomSheetDialog(this) }
+            setOnKeyListener { _, _, event ->
+                if (event.keyCode == KeyEvent.KEYCODE_BACK) {
+                    changeBackgroundToolbarViewAlpha()
+                    dismiss()
+                    true
+                } else {
+                    false
+                }
+            }
         }
     }
 
@@ -78,7 +88,7 @@ class MyBottomSheetDialog : BottomSheetDialogFragment() {
     }
 
     private fun changeBackgroundToolbarViewAlpha(slideOffset: Float = 0f) {
-        (activity as MainActivity).setToolbarViewAlpha(slideOffset)
+        (activity as MainActivity?)?.setToolbarViewAlpha(slideOffset)
     }
 
     companion object {
